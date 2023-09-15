@@ -23,4 +23,4 @@ spec:
   volumes:  
   - name: primeiro-emptydir  # precisa ser o mesmo nome do volume do container
     emptyDir: 
-      sizeLimit: "256Mi"
+      sizeLimit: 256Mi

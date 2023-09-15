@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels: 
+    run: challenge
+    service: webserver 
+  name: challenge
+spec: 
+  containers:
+    - name: webserver
+      image: nginx
+      ports:
+      - containerPort: 80  # Porta que o container "webserver" escuta
+      volumeMounts:
+      - mountPath: /core-nginx
+        name: emptydir-nginx
+      resources: 
+        limits: 
+          cpu: "0.5"
+          memory: "120Mi"
+        requests:
+          cpu: "0.3"
+          memory: "64Mi"
+    - name: python
+      image: python
+      ports:
+        - containerPort: 81  # Porta que o container "python" escuta
+      volumeMounts:
+      - mountPath: /core-python
+        name: emptydir-python
+      resources: 
+        limits: 
+          cpu: "1.0"
+          memory: "256Mi"
+        requests:
+          cpu: "0.5"
+          memory: "110Mi"
+      args:
+      - sleep
+      - "600"
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:  
+  - name: emptydir-nginx  # precisa ser o mesmo nome do volume do container
+    emptyDir: 
+      sizeLimit: "256Mi"
+  - name: emptydir-python
+    emptyDir: 
+      sizeLimit: "256Mi"
