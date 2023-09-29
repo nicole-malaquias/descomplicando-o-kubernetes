@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx-deployment
+  name: nginx-deployment
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: nginx-deployment
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 # pode ter até 1 pode a mais no que eu pedi , se tenho 10 pods na hroa de atualizar posso chegar a 11
+      maxUnavailable: 2 # vai atualizar de 2 em 2
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-deployment
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+status: {}

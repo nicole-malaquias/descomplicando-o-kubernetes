@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-deployment
+  name: nginx-deployment
+  namespace: girop  ops
+spec:
+  replicas: 10
+  revisionHistoryLimit: 10  # numero de revisões que o deployment vai manter
+  selector: # sinaliza que o deployment vai gerenciar os pods com a label app: nginx-deployment
+    matchLabels:
+      app: nginx-deployment
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 # pode ter até 1 pode a mais no que eu pedi , se tenho 10 pods na hroa de atualizar posso chegar a 11
+      maxUnavailable: 1 # vai atualizar de 2 em 2
+  template: # template do pod daqui para baixo é só coisa do pods e containers e para cima do deployment
+    metadata:
+      labels:
+        app: nginx-deployment
+    spec:
+      containers:
+      - image: nginx:1.15.0
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources: 
+          limits:
+            memory: "256Mi"
+            cpu: "0.5"
+          requests:
+            memory: "64Mi"
+            cpu: "0.3"
